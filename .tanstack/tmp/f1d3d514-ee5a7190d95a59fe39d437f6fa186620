@@ -9,18 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as Issue002RouteImport } from './routes/issue-002'
 import { Route as Issue001RouteImport } from './routes/issue-001'
+import { Route as Issue002RouteImport } from './routes/Issue002'
 import { Route as IndexRouteImport } from './routes/index'
 
-const Issue002Route = Issue002RouteImport.update({
-  id: '/issue-002',
-  path: '/issue-002',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const Issue001Route = Issue001RouteImport.update({
   id: '/issue-001',
   path: '/issue-001',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Issue002Route = Issue002RouteImport.update({
+  id: '/Issue002',
+  path: '/Issue002',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,48 +31,48 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/Issue002': typeof Issue002Route
   '/issue-001': typeof Issue001Route
-  '/issue-002': typeof Issue002Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/Issue002': typeof Issue002Route
   '/issue-001': typeof Issue001Route
-  '/issue-002': typeof Issue002Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/Issue002': typeof Issue002Route
   '/issue-001': typeof Issue001Route
-  '/issue-002': typeof Issue002Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/issue-001' | '/issue-002'
+  fullPaths: '/' | '/Issue002' | '/issue-001'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/issue-001' | '/issue-002'
-  id: '__root__' | '/' | '/issue-001' | '/issue-002'
+  to: '/' | '/Issue002' | '/issue-001'
+  id: '__root__' | '/' | '/Issue002' | '/issue-001'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  Issue001Route: typeof Issue001Route
   Issue002Route: typeof Issue002Route
+  Issue001Route: typeof Issue001Route
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/issue-002': {
-      id: '/issue-002'
-      path: '/issue-002'
-      fullPath: '/issue-002'
-      preLoaderRoute: typeof Issue002RouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/issue-001': {
       id: '/issue-001'
       path: '/issue-001'
       fullPath: '/issue-001'
       preLoaderRoute: typeof Issue001RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Issue002': {
+      id: '/Issue002'
+      path: '/Issue002'
+      fullPath: '/Issue002'
+      preLoaderRoute: typeof Issue002RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -87,8 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  Issue001Route: Issue001Route,
   Issue002Route: Issue002Route,
+  Issue001Route: Issue001Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
