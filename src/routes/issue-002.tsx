@@ -45,6 +45,8 @@ const MEDIA = {
   // keeps going while you move between every later spread
   track1: "/audio/track1.mp3", // e.g. "/audio/track-1.mp3"
   track2: "/audio/track2.mp3", // e.g. "/audio/track-2.mp3"
+  voiceHer: "/audio/neva.m4a", // e.g. "/audio/her-voice.mp3"
+voiceMe: "audio/mada.m4a",  // e.g. "/audio/my-voice.mp3"
 };
 
 // accent palette — red is the primary tag color throughout;
@@ -56,15 +58,16 @@ const BLUE = "#6C8EFF"; // a slightly more saturated cousin of issue 001's #B9C7
 
 type SpreadKey =
   | "cover"
+  | "audio"
   | "sentence"
   | "photo"
   | "tiny"
-  | "audio"
   | "collage"
   | "note"
   | "date"
   | "video"
   | "gallery"
+  | "voice"
   | "letter"
   | "back";
 
@@ -79,6 +82,7 @@ const SPREADS: SpreadKey[] = [
   "date",
   "video",
   "gallery",
+  "voice",
   "letter",
   "back",
 ];
@@ -127,6 +131,13 @@ useEffect(() => {
       return next;
     });
   }, []);
+  const duckMusic = useCallback(() => {
+  audioRefs.current.forEach((a) => { a.volume = volume * 0.15; });
+}, [volume]);
+
+const restoreMusic = useCallback(() => {
+  audioRefs.current.forEach((a) => { a.volume = volume; });
+}, [volume]);
 
   const goTo = (i: number) => {
     if (i < 0 || i >= SPREADS.length) return;
@@ -202,6 +213,8 @@ useEffect(() => {
               toggleMute: () => setMuted((m) => !m),
             volume,
   setVolume,
+  duckMusic,
+  restoreMusic,
             })}
           </PageFade>
         ))}
@@ -250,9 +263,8 @@ function PageFade({ show, children }: { show: boolean; children: React.ReactNode
 ================================================================= */
 function renderSpread(
   key: SpreadKey,
-  audio: { isPlaying: boolean; togglePlay: () => void; hasTracks: boolean; muted: boolean; toggleMute: () => void; volume: number; setVolume: (v: number) => void }
-) {
-  switch (key) {
+  audio: { isPlaying: boolean; togglePlay: () => void; hasTracks: boolean; muted: boolean; toggleMute: () => void; volume: number; setVolume: (v: number) => void; duckMusic: () => void; restoreMusic: () => void }
+) {  switch (key) {
     case "cover":
       return <Cover />;
     case "sentence":
@@ -273,7 +285,9 @@ function renderSpread(
       return <VideoSpread muted={audio.muted} onToggleMute={audio.toggleMute} />;
     case "gallery":
       return <Gallery />;
-    case "letter":
+case "voice":
+  return <Voice duckMusic={audio.duckMusic} restoreMusic={audio.restoreMusic} />;
+      case "letter":
       return <Letter />;
     case "back":
       return <Back />;
@@ -427,11 +441,11 @@ while you're reading.</span>
 /* ---------------------------- 6 — COLLAGE ---------------------------- */
 function Collage() {
   const tags: { word: string; top: string; left: string; color: string }[] = [
-    { word: "the", top: "10%", left: "8%", color: BLUE },
-    { word: "way", top: "6%", left: "62%", color: LIME },
-    { word: "you", top: "48%", left: "4%", color: RED },
-    { word: "laugh", top: "70%", left: "58%", color: BLUE },
-    { word: "playlists", top: "82%", left: "16%", color: LIME },
+    { word: "love", top: "10%", left: "8%", color: BLUE },
+    { word: "the", top: "6%", left: "62%", color: LIME },
+    { word: "way", top: "48%", left: "4%", color: RED },
+    { word: "you", top: "70%", left: "58%", color: BLUE },
+    { word: "laugh", top: "82%", left: "16%", color: LIME },
   ];
   return (
     <section className="relative w-full h-full bg-black">
@@ -533,6 +547,47 @@ function Gallery() {
       >
         my <span className="font-garamond italic">favorite</span>.
       </span>
+    </section>
+  );
+}
+
+/*----------------------------audio --------------------------------------*/
+function Voice({ duckMusic, restoreMusic }: { duckMusic: () => void; restoreMusic: () => void }) {
+  const [playingKey, setPlayingKey] = useState<"her" | "me" | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const play = (key: "her" | "me", src: string) => {
+    if (!src) return;
+    audioRef.current?.pause();
+    if (playingKey === key) {
+      setPlayingKey(null);
+      restoreMusic();
+      return;
+    }
+    const audio = new Audio(src);
+    audioRef.current = audio;
+    duckMusic();
+    audio.play();
+    setPlayingKey(key);
+    audio.onended = () => {
+      setPlayingKey(null);
+      restoreMusic();
+    };
+  };
+
+  return (
+    <section className="relative w-full h-full bg-white text-black flex flex-col items-center justify-center gap-8 px-10">
+      <span className="text-[11px] uppercase tracking-[0.18em] text-black/60">listen ^^</span>
+      <button onClick={() => play("me", MEDIA.voiceMe)} disabled={!MEDIA.voiceMe}
+        className="text-[13px] tracking-[0.08em] px-6 py-3 border disabled:opacity-30"
+        style={{ borderColor: playingKey === "me" ? RED : "#D9D8D3", color: playingKey === "me" ? RED : "#4B4B48" }}>
+        {playingKey === "me" ? "❙❙  ^^ " : "▷  ^^"}
+      </button>
+      <button onClick={() => play("her", MEDIA.voiceHer)} disabled={!MEDIA.voiceHer}
+        className="text-[13px] tracking-[0.08em] px-6 py-3 border disabled:opacity-30"
+        style={{ borderColor: playingKey === "her" ? RED : "#D9D8D3", color: playingKey === "her" ? RED : "#4B4B48" }}>
+        {playingKey === "her" ? "❙❙  :0" : "▷  :0"}
+      </button>
     </section>
   );
 }

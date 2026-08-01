@@ -1,0 +1,4 @@
+const tsrStartManifest = () => ({ routes: { __root__: { filePath: "/Users/mada/Documents/GitHub/vadaysnv/src/routes/__root.tsx", children: ["/", "/issue-001", "/issue-002"], assets: [{ tag: "link", attrs: { rel: "stylesheet", href: "/assets/index-CtPzTUws.css", type: "text/css" } }], preloads: ["/assets/index-BBtqD-lE.js"] }, "/": { filePath: "/Users/mada/Documents/GitHub/vadaysnv/src/routes/index.tsx", children: void 0, assets: [], preloads: ["/assets/index-BdgVH3Uy.js"] }, "/issue-001": { filePath: "/Users/mada/Documents/GitHub/vadaysnv/src/routes/issue-001.tsx", children: void 0, assets: [], preloads: ["/assets/issue-001-DVcC6WV7.js"] }, "/issue-002": { filePath: "/Users/mada/Documents/GitHub/vadaysnv/src/routes/issue-002.tsx", children: void 0, assets: [], preloads: ["/assets/issue-002-C--ZSaxF.js"] } }, clientEntry: "/assets/index-BBtqD-lE.js" });
+export {
+  tsrStartManifest
+};

@@ -183,7 +183,7 @@ function IssueZeroLanding() {
   return (
     <main className="fixed inset-0 overflow-hidden bg-white">
       <div className="absolute top-6 left-6 z-10 text-[12px] tracking-[0.12em] uppercase text-black/50 pointer-events-none">
-         000 — archives
+         000 — index
       </div>
 
       <div
@@ -191,7 +191,7 @@ function IssueZeroLanding() {
   style={{ opacity: heroVisible ? 1 : 0, filter: "blur(2.5px)" }}
 >
         <h1 className="text-black font-semibold tracking-tight" style={{ fontSize: "clamp(30px, 6vw, 52px)" }}>
-          
+          memories <br></br> archived
         </h1>
       </div>
 
